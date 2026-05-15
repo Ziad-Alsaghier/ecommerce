@@ -15,10 +15,12 @@ import {
     FieldLabel,
     FieldError,
 } from "@/components/ui/field";
+
 import LoginAction from "./LoginActions.actions";
 import { ILoginData } from "@/Interfaces/auth.interface";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+
 /* ================= ZOD SCHEMA ================= */
 const loginSchema = z.object({
     email: z
@@ -47,18 +49,14 @@ export default function Login() {
         },
     });
 
-    const onSubmit = (data) => {
-        console.log("Login Data:", data);
-    };
-
     async function handleLogin(values: ILoginData) {
         const result = await LoginAction(values);
-                console.log('result'+result);
-                
+        console.log("result" + result);
+
         if (result) {
             toast.success("Login Success", {
                 style: {
-                    background: "#16a34a", // green-600
+                    background: "#16a34a",
                     color: "#fff",
                     border: "1px solid #22c55e",
                     borderRadius: "12px",
@@ -70,7 +68,7 @@ export default function Login() {
         } else {
             toast.error("Login Faild :(", {
                 style: {
-                    background: "#dc2626", // red-600
+                    background: "#dc2626",
                     color: "#fff",
                     border: "1px solid #ef4444",
                     borderRadius: "12px",
@@ -120,8 +118,10 @@ export default function Login() {
                 <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
 
                     {/* EMAIL */}
-                    <Field className={'mb-2'}>
-                        <FieldLabel className={'font-bold'} htmlFor="email">Email*</FieldLabel>
+                    <Field className="mb-2">
+                        <FieldLabel className="font-bold" htmlFor="email">
+                            Email*
+                        </FieldLabel>
 
                         <Controller
                             name="email"
@@ -132,18 +132,23 @@ export default function Login() {
                                     id="email"
                                     type="email"
                                     placeholder="ali@example.com"
+                                    className="w-full"
                                 />
                             )}
                         />
 
                         {errors.email && (
-                            <FieldError>{errors.email.message}</FieldError>
+                            <FieldError className="font-black">
+                                {errors.email.message}
+                            </FieldError>
                         )}
                     </Field>
 
                     {/* PASSWORD */}
-                    <Field>
-                        <FieldLabel htmlFor="password">Password*</FieldLabel>
+                    <Field className="mb-2">
+                        <FieldLabel className="font-bold" htmlFor="password">
+                            Password*
+                        </FieldLabel>
 
                         <Controller
                             name="password"
@@ -154,12 +159,15 @@ export default function Login() {
                                     id="password"
                                     type="password"
                                     placeholder="Enter password"
+                                    className="w-full"
                                 />
                             )}
                         />
 
                         {errors.password && (
-                            <FieldError>{errors.password.message}</FieldError>
+                            <FieldError className="font-black">
+                                {errors.password.message}
+                            </FieldError>
                         )}
                     </Field>
 
@@ -204,7 +212,6 @@ export default function Login() {
                 </p>
 
             </div>
-
         </div>
     );
 }
