@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import {
     Field,
     FieldLabel,
-    FieldError,
 } from "@/components/ui/field";
 import LoginAction from "./LoginActions.actions";
 import { ILoginData } from "@/Interfaces/auth.interface";
@@ -31,6 +30,15 @@ const loginSchema = z.object({
 
     remember: z.boolean().optional(),
 });
+
+type FieldErrorProps = {
+    className?: string;
+    children: React.ReactNode;
+};
+
+export function FieldError({ className, children }: FieldErrorProps) {
+    return <p className={className}>{children}</p>;
+}
 
 export default function Login() {
     const router = useRouter();

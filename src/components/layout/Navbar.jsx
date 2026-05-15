@@ -25,12 +25,15 @@ export default function Navbar() {
     ];
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [token, setToken] = useState(
+
         typeof window !== "undefined"
             ? localStorage.getItem("token")
             : null
 
 
     );
+
+
     return (
         <div>
             {/* MAIN NAVBAR */}

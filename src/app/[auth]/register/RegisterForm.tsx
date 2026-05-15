@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import {
     Field,
     FieldLabel,
-    FieldError,
 } from "@/components/ui/field";
 import RegisterAction from "./RegisterAction.actions";
 import { IRegisterData } from "@/Interfaces/auth.interface";
@@ -48,6 +47,14 @@ const registerSchema = z
         message: "Passwords do not match",
         path: ["rePassword"],
     });
+type FieldErrorProps = {
+    className?: string;
+    children: React.ReactNode;
+};
+
+export function FieldError({ className, children }: FieldErrorProps) {
+    return <p className={className}>{children}</p>;
+}
 export default function RegisterForm() {
     const router = useRouter();
 
@@ -55,7 +62,7 @@ export default function RegisterForm() {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm ( {
+    } = useForm({
         resolver: zodResolver(registerSchema),
         defaultValues: {
             name: "",
@@ -67,7 +74,7 @@ export default function RegisterForm() {
         },
     });
 
- 
+
     async function handleRegister(values: IRegisterData) {
         const result = await RegisterAction(values);
 
@@ -160,14 +167,16 @@ export default function RegisterForm() {
                 <form onSubmit={handleSubmit(handleRegister)} className="space-y-5">
 
                     {/* NAME */}
-                    <Field>
-                        <FieldLabel htmlFor="name">Name*</FieldLabel>
+                    <Field className={""}>
+                        <FieldLabel className={"font-black"} htmlFor="name">Name*</FieldLabel>
 
                         <Controller
                             name="name"
                             control={control}
                             render={({ field }) => (
                                 <Input
+                                    type={"name"}
+                                    className={"font-black"}
                                     {...field}
                                     id="name"
                                     placeholder="Enter your name"
@@ -181,17 +190,18 @@ export default function RegisterForm() {
                     </Field>
 
                     {/* EMAIL */}
-                    <Field>
-                        <FieldLabel htmlFor="email">Email*</FieldLabel>
+                    <Field className={""}>
+                        <FieldLabel className={"font-black"} htmlFor="email">Email*</FieldLabel>
 
                         <Controller
                             name="email"
                             control={control}
                             render={({ field }) => (
                                 <Input
+                                    type={"email"}
+                                    className={"font-black"}
                                     {...field}
                                     id="email"
-                                    type="email"
                                     placeholder="Enter your email"
                                 />
                             )}
@@ -203,17 +213,18 @@ export default function RegisterForm() {
                     </Field>
 
                     {/* PASSWORD */}
-                    <Field>
-                        <FieldLabel htmlFor="password">Password*</FieldLabel>
+                    <Field className={""}>
+                        <FieldLabel className={"font-black"} htmlFor="password">Password*</FieldLabel>
 
                         <Controller
                             name="password"
                             control={control}
                             render={({ field }) => (
                                 <Input
+                                    type={"password"}
+                                    className={"font-black"}
                                     {...field}
                                     id="password"
-                                    type="password"
                                     placeholder="Enter password"
                                 />
                             )}
@@ -225,8 +236,8 @@ export default function RegisterForm() {
                     </Field>
 
                     {/* CONFIRM PASSWORD */}
-                    <Field>
-                        <FieldLabel htmlFor="rePassword">
+                    <Field className={""}>
+                        <FieldLabel className={"font-black"} htmlFor="rePassword">
                             Confirm Password*
                         </FieldLabel>
 
@@ -235,9 +246,10 @@ export default function RegisterForm() {
                             control={control}
                             render={({ field }) => (
                                 <Input
+                                    type={"rePassword"}
+                                    className={"font-black"}
                                     {...field}
                                     id="rePassword"
-                                    type="password"
                                     placeholder="Confirm password"
                                 />
                             )}
@@ -251,17 +263,18 @@ export default function RegisterForm() {
                     </Field>
 
                     {/* PHONE */}
-                    <Field>
-                        <FieldLabel htmlFor="phone">Phone*</FieldLabel>
+                    <Field className={""}>
+                        <FieldLabel className={"font-black"} htmlFor="phone">Phone*</FieldLabel>
 
                         <Controller
                             name="phone"
                             control={control}
                             render={({ field }) => (
                                 <Input
+                                    type={"phone"}
+                                    className={"font-black"}
                                     {...field}
                                     id="phone"
-                                    type="tel"
                                     placeholder="Enter phone number"
                                 />
                             )}
@@ -276,7 +289,7 @@ export default function RegisterForm() {
                             control={control}
                             render={({ field }) => (
                                 <input
-                                    type="checkbox"
+                                    type={"terms"}
                                     checked={field.value}
                                     onChange={(e) =>
                                         field.onChange(e.target.checked)

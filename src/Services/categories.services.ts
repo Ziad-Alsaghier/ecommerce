@@ -4,7 +4,10 @@ export async function getCategories() {
       "https://ecommerce.routemisr.com/api/v1/categories",
       {
         method: "GET",
-        cache: "no-store",
+        cache: "force-cache",
+        next: {
+          revalidate: 60,
+        },
       },
     );
 
@@ -13,14 +16,12 @@ export async function getCategories() {
     }
     const categories = await response.json();
 
-
     return await categories.data;
   } catch (error) {
     console.error("getCategories error:", error);
     return []; // fallback so UI doesn't crash
   }
 }
-
 
 // export async function categoryDetails(category): Category {
 //   //  Logic Code

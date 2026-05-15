@@ -17,6 +17,8 @@ export default function Header() {
       ? localStorage.getItem("token")
       : null
   );
+
+
   return (
     <>
       {/* TOP BAR */}
