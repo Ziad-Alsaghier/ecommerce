@@ -246,7 +246,7 @@ export default function RegisterForm() {
                             control={control}
                             render={({ field }) => (
                                 <Input
-                                    type={"rePassword"}
+                                    type={"password"}
                                     className={"font-black"}
                                     {...field}
                                     id="rePassword"
@@ -289,17 +289,16 @@ export default function RegisterForm() {
                             control={control}
                             render={({ field }) => (
                                 <input
-                                    type={"terms"}
-                                    checked={field.value}
-                                    onChange={(e) =>
-                                        field.onChange(e.target.checked)
-                                    }
+                                    id="terms"
+                                    type="checkbox"
+                                    checked={!!field.value}
+                                    onChange={(e) => field.onChange(e.target.checked)}
                                     className="h-4 w-4 rounded border-gray-300 text-green-600"
                                 />
                             )}
                         />
 
-                        <label htmlFor="terms" className="text-xs text-gray-600">
+                        <label htmlFor="terms" className="text-xs text-gray-600 cursor-pointer">
                             I agree to Terms & Privacy
                         </label>
 
