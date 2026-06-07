@@ -1,7 +1,9 @@
+'use client';
 import React from 'react';
 import { MoveRight, Flame, Sparkles } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { motion } from 'framer-motion';
 
 const OfferCard = ({
     title,
@@ -17,10 +19,9 @@ const OfferCard = ({
         green: "bg-emerald-600 from-emerald-500 to-emerald-700",
         orange: "bg-gradient-to-r from-orange-400 via-orange-500 to-rose-500"
     };
-
+    //  In This section I will Use New Package For Animation Called Framer Motion To Make The Cards Appear With A Smooth Fade And Slide Effect When They Come Into View. This Will Add A Nice Touch Of Interactivity And Make The Offers Section More Engaging For Users. 
     return (
         <Card className={`relative overflow-hidden border-none p-8 text-white min-h-60 flex flex-col justify-between transition-transform hover:scale-[1.01] ${themes[variant]}`}>
-            {/* Abstract Background Decoration */}
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
             <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-black/5 rounded-full blur-xl" />
 
@@ -31,7 +32,6 @@ const OfferCard = ({
                     {badgeText}
                 </div>
 
-                {/* Content */}
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
                     <p className="text-white/90 text-sm mt-1">{subtitle}</p>
@@ -46,7 +46,6 @@ const OfferCard = ({
                 </div>
             </div>
 
-            {/* Action Button */}
             <div className="relative z-10 pt-4">
                 <Button
                     variant="secondary"
@@ -62,28 +61,43 @@ const OfferCard = ({
 
 export default function Offers() {
     return (
-        <section className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <OfferCard
-                variant="green"
-                badgeIcon={Flame}
-                badgeText="Deal of the Day"
-                title="Fresh Organic Fruits"
-                subtitle="Get up to 40% off on selected organic fruits"
-                discount="40%"
-                code="ORGANIC40"
-                buttonText="Shop Now"
-            />
+        <section className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-hidden">
+            <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.3 }} // Animates when 30% of the card is visible
+            >
+                <OfferCard
+                    variant="green"
+                    badgeIcon={Flame}
+                    badgeText="Deal of the Day"
+                    title="Fresh Organic Fruits"
+                    subtitle="Get up to 40% off on selected organic fruits"
+                    discount="40%"
+                    code="ORGANIC40"
+                    buttonText="Shop Now"
+                />
+            </motion.div>
 
-            <OfferCard
-                variant="orange"
-                badgeIcon={Sparkles}
-                badgeText="New Arrivals"
-                title="Exotic Vegetables"
-                subtitle="Discover our latest collection of premium vegetables"
-                discount="25%"
-                code="FRESH25"
-                buttonText="Explore Now"
-            />
+
+            <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                viewport={{ once: true, amount: 0.3 }}
+            >
+                <OfferCard
+                    variant="orange"
+                    badgeIcon={Sparkles}
+                    badgeText="New Arrivals"
+                    title="Exotic Vegetables"
+                    subtitle="Discover our latest collection of premium vegetables"
+                    discount="25%"
+                    code="FRESH25"
+                    buttonText="Explore Now"
+                />
+            </motion.div>
         </section>
     );
 }

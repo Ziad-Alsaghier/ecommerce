@@ -9,7 +9,7 @@ import ProductCardLoading from "@/components/loaders/ProductCardLoading";
 import Rating from "@/components/ui/Rating";
 import AddToCartButton from "@/components/Products/AddToCartButton";
 export default async function Products() {
-  const products = await getProducts();
+  const products = await getProducts() ?? [];
 
   return (
 
