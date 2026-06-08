@@ -1,6 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { jwtDecode } from "jwt-decode";
+import { DecodedToken } from "@/Interfaces/decodedToken.interface";
 
 export const AuthConfig: NextAuthOptions = {
   providers: [
@@ -32,7 +33,7 @@ export const AuthConfig: NextAuthOptions = {
         if (response.ok) {
           const { token, user } = await response.json();
           console.log("NextAuth Response: ", { user, token });
-          const userData = jwtDecode(token);
+          const userData = jwtDecode<DecodedToken>(token);
           return {
             // Use JWT Token as the user ID or any unique identifier
             id: userData?.id,
@@ -57,11 +58,9 @@ export const AuthConfig: NextAuthOptions = {
 
   callbacks: {
     jwt: function (params) {
-      console.log("Params From JWT :  ");
-      console.log(params);
       if (params.user) {
-        params.token.userToken = params.user.userToken;
-        params.token.id = params.user.id;
+        params.token.userToken = (params.user as any).userToken;
+        params.token.id = (params.user as any).id;
       }
       return params?.token;
     },
