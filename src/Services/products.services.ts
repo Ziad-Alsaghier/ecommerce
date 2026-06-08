@@ -4,7 +4,7 @@ import React from "react";
 export async function getProducts(): Promise<Product[]> {
   try {
     const response = await fetch(
-      "https://ecommerce.routemisr.com/api/v1/products",
+      process.env.NEXTAUTH_BASE_URL + "/api/v1/products",
       {
         method: "GET",
         cache: "force-cache",
@@ -31,7 +31,7 @@ export async function getProducts(): Promise<Product[]> {
 export async function getDetails(productId: string): Promise<Product[]> {
   try {
     const response = await fetch(
-      "https://ecommerce.routemisr.com/api/v1/products/" + productId,
+      process.env.NEXTAUTH_BASE_URL + "/api/v1/products/" + productId,
       {
         method: "GET",
         cache: "force-cache",

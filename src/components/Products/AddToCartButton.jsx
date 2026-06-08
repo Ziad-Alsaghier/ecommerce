@@ -4,15 +4,16 @@ import { useState } from "react";
 import { FiPlus, FiCheck } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import AuthModal from "@/components/ui/Modals/AuthModal"; // create this
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AddToCartButton({ product }) {
     const [added, setAdded] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const { user, isLoggedIn, isLoading } = useAuth();
 
     function addToCart() {
-        const token = localStorage.getItem("token"); // or your auth key
 
-        if (!token) {
+        if (!isLoggedIn) {
             setShowModal(true);
             return;
         }

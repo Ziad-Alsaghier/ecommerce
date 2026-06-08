@@ -18,7 +18,7 @@ import LoginAction from "./LoginActions.actions";
 import { ILoginData } from "@/Interfaces/auth.interface";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+import { signIn } from 'next-auth/react';
 /* ================= ZOD SCHEMA ================= */
 const loginSchema = z.object({
     email: z
@@ -57,11 +57,14 @@ export default function Login() {
     });
 
     async function handleLogin(values: ILoginData) {
-        const result = await LoginAction(values);
-        console.log("result" + result);
+        // const result = await LoginAction(values);
+        const result = await signIn('credentials', {
+            redirect: false,
+            ...values
+        });
 
-        if (result) {
-            toast.success("Login Success", {
+        if (result?.ok) {
+            toast.success("Login Success 😀", {
                 style: {
                     background: "#16a34a",
                     color: "#fff",
@@ -73,7 +76,11 @@ export default function Login() {
 
             router.push("/");
         } else {
-            toast.error("Login Faild :(", {
+
+
+            console.log("resultttttttttttttttt" + result);
+
+            toast.error("Login Faild ☹️", {
                 style: {
                     background: "#dc2626",
                     color: "#fff",
@@ -213,7 +220,7 @@ export default function Login() {
 
                 <p className="text-center mt-8 text-sm text-gray-500">
                     Don’t have an account?{" "}
-                    <Link href="/register" className="text-green-600 font-bold">
+                    <Link href="register/" className="text-green-600 font-bold">
                         Sign Up
                     </Link>
                 </p>

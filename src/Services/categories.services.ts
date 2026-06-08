@@ -1,7 +1,7 @@
 export async function getCategories() {
   try {
     const response = await fetch(
-      "https://ecommerce.routemisr.com/api/v1/categories",
+      process.env.NEXTAUTH_BASE_URL + "/api/v1/categories",
       {
         method: "GET",
         cache: "force-cache",

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { FiSearch, FiHeart, FiUser, FiMenu, FiGift } from "react-icons/fi";
 import { FiShoppingCart } from "react-icons/fi";
-import { BsPostcard } from "react-icons/bs";
+import { BsFilePerson, BsFilePersonFill, BsPostcard } from "react-icons/bs";
 import { MdHeadsetMic } from "react-icons/md";
 import { TiShoppingCart } from "react-icons/ti";
 import ShoppingCart from '../shoppingCart/ShoppingCart';
@@ -11,11 +11,18 @@ import { useEffect, useState } from "react";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
 import { HiChevronDown } from 'react-icons/hi';
 import { usePathname } from "next/navigation";
+import { useSession } from 'next-auth/react';
+import { useAuth } from '@/hooks/useAuth';
+import { IoPersonCircle, IoPersonCircleOutline } from "react-icons/io5";
+import { Button } from '../ui/button';
+
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const pathname = usePathname();
     const isActive = (href) => pathname === href;
     // Example categories - you can map these from your data
+
     const categories = [
         { name: 'All Categories', href: '/categories' },
         { name: 'Electronics', href: '/categories/electronics' },
@@ -33,6 +40,10 @@ export default function Navbar() {
 
     );
 
+    const { user, isLoggedIn, isLoading } = useAuth();
+    function handleLogOut() {
+
+    }
 
     return (
         <div>
@@ -85,8 +96,8 @@ export default function Navbar() {
 
                             <div
                                 className="relative inline-block"
-                                onMouseEnter={() => setIsOpen(true)}
-                                onMouseLeave={() => setIsOpen(false)}
+                                onMouseEnter={() => setIsCategoryOpen(true)}
+                                onMouseLeave={() => setIsCategoryOpen(false)}
                             >
                                 {/* Trigger Link */}
                                 <Link
@@ -97,11 +108,11 @@ export default function Navbar() {
                                         }`}
                                 >
                                     Categories
-                                    <HiChevronDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                                    <HiChevronDown className={`transition-transform duration-200 ${isCategoryOpen ? 'rotate-180' : ''}`} />
                                 </Link>
 
                                 {/* Dropdown Menu */}
-                                {isOpen && (
+                                {isCategoryOpen && (
                                     <div className="absolute left-0 top-full w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-3 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                                         <ul className="flex flex-col">
                                             {categories.map((cat, index) => (
@@ -164,6 +175,98 @@ export default function Navbar() {
                                 <FiMenu size={20} />
                             </button>
                         </div>
+
+                        {isLoggedIn && (
+                            <div
+                                className="relative inline-block"
+                                onMouseLeave={() => setIsProfileOpen(false)}
+                            >
+                                {/* Trigger */}
+                                <Button
+                                    href="/profile"
+                                    onClick={() => setIsProfileOpen((prev) => !prev)}
+                                    className=" items-center hidden   bg-black cursor-pointer lg:flex md:flex gap-2  transition-colors py-5 text-gray-700 hover:bg-amber-600 hover:text-green-600"
+                                >
+                                    <IoPersonCircle size={102} />
+                                    {/* <span className="hidden sm:block text-sm group:hover:bg-green">
+                                        {user?.name?.slice(0, 15) || "User"}
+                                    </span> */}
+                                    <HiChevronDown className={`transition-transform  duration-200 ${isProfileOpen ? "rotate-180" : ""}`} />
+                                </Button>
+
+                                {/* Dropdown */}
+                                {isProfileOpen && (
+                                    <div className="absolute right-0 top-full w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50">
+                                        <div className="px-5 py-3 border-b">
+                                            <p className="text-sm font-semibold text-gray-800">
+                                                {user?.name || "User"}
+                                            </p>
+                                        </div>
+
+                                        <ul className="flex flex-col">
+                                            <li>
+                                                <Link
+                                                    href="/profile"
+                                                    className="flex items-center gap-2 px-5 py-3 text-gray-600 hover:bg-gray-50"
+                                                >
+                                                    <BsFilePerson className="text-[16px]" />
+                                                    My Profile
+                                                </Link>
+                                            </li>
+
+                                            <li>
+                                                <Link
+                                                    href="/orders"
+                                                    className="flex items-center gap-2 px-5 py-3 text-gray-600 hover:bg-gray-50"
+                                                >
+                                                    <BsPostcard className="text-[16px]" />
+                                                    My Orders
+                                                </Link>
+                                            </li>
+
+                                            <li>
+                                                <Link
+                                                    href="/wishlist"
+                                                    className="flex items-center gap-2 px-5 py-3 text-gray-600 hover:bg-gray-50"
+                                                >
+                                                    <FiHeart className="text-[16px]" />
+                                                    My Wishlist
+                                                </Link>
+                                            </li>
+
+                                            <li>
+                                                <Link
+                                                    href="/addresses"
+                                                    className="flex items-center gap-2 px-5 py-3 text-gray-600 hover:bg-gray-50"
+                                                >
+                                                    <FiUser className="text-[16px]" />
+                                                    Addresses
+                                                </Link>
+                                            </li>
+
+                                            <li>
+                                                <Link
+                                                    href="/settings"
+                                                    className="flex items-center gap-2 px-5 py-3 text-gray-600 hover:bg-gray-50"
+                                                >
+                                                    <FiMenu className="text-[16px]" />
+                                                    Settings
+                                                </Link>
+                                            </li>
+
+                                            <li>
+                                                <Button
+                                                    onClick={() => handleLogOut()}
+                                                    className="w-full flex items-center gap-2 px-5 py-3 text-red-500 hover:bg-red-50"
+                                                >
+                                                    <FiLogOut className="text-[16px]" />
+                                                </Button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* MOBILE MENU */}
@@ -174,8 +277,8 @@ export default function Navbar() {
                                 href="/"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className={`flex items-center justify-between px-5 py-3 font-medium transition ${isActive("/")
-                                        ? "text-green-600 bg-green-100"
-                                        : "text-gray-700 hover:text-green-600"
+                                    ? "text-green-600 bg-green-100"
+                                    : "text-gray-700 hover:text-green-600"
                                     }`}
                             >
                                 Home
@@ -185,8 +288,8 @@ export default function Navbar() {
                                 href="/products"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className={`flex items-center justify-between px-5 py-3 font-medium transition ${isActive("/products")
-                                        ? "text-green-600 bg-green-100"
-                                        : "text-gray-700 hover:text-green-600"
+                                    ? "text-green-600 bg-green-100"
+                                    : "text-gray-700 hover:text-green-600"
                                     }`}
                             >
                                 Shop
@@ -196,8 +299,8 @@ export default function Navbar() {
                                 href="/categories"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className={`flex items-center justify-between px-5 py-3 font-medium transition ${isActive("/categories")
-                                        ? "text-green-600 bg-green-100"
-                                        : "text-gray-700 hover:text-green-600"
+                                    ? "text-green-600 bg-green-100"
+                                    : "text-gray-700 hover:text-green-600"
                                     }`}
                             >
                                 Categories
@@ -208,23 +311,23 @@ export default function Navbar() {
                                 href="/brands"
                                 onClick={() => setMobileMenuOpen(false)}
                                 className={`flex items-center justify-between px-5 py-3 font-medium transition ${isActive("/brands")
-                                        ? "text-green-600 bg-green-100"
-                                        : "text-gray-700 hover:text-green-600"
+                                    ? "text-green-600 bg-green-100"
+                                    : "text-gray-700 hover:text-green-600"
                                     }`}
                             >
                                 Brands
                             </Link>
 
                             {/* Auth */}
-                            {token ? (
-                                <Link
+                            {isLoggedIn ? (
+                                <Button
                                     href="/Signout"
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="flex items-center gap-2 px-5 py-3 text-red-500 hover:text-red-600 transition"
+                                    className="flex  items-center gap-2 px-5 py-3 text-red-500 hover:text-red-600 transition"
                                 >
                                     <FiLogOut size={16} />
                                     <span>Sign Out</span>
-                                </Link>
+                                </Button>
                             ) : (
                                 <Link
                                     href="/auth/register"

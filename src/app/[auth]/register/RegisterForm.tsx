@@ -20,6 +20,7 @@ import RegisterAction from "./RegisterAction.actions";
 import { IRegisterData } from "@/Interfaces/auth.interface";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 /* ================= ZOD SCHEMA ================= */
 const registerSchema = z
     .object({
@@ -320,6 +321,13 @@ export default function RegisterForm() {
                     </button>
 
                 </form>
+
+                <p className="text-center mt-8 text-sm text-gray-500">
+                    Already Have Account?{" "}
+                    <Link href="/api/auth/signin/" className="text-green-600 font-bold">
+                        Sign Up
+                    </Link>
+                </p>
             </div>
         </div>
     );

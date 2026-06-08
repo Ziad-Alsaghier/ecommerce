@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthConfig: NextAuthOptions = {
   providers: [
@@ -29,13 +30,15 @@ export const AuthConfig: NextAuthOptions = {
           },
         );
         if (response.ok) {
-          const { token, ...userInfo } = await response.json();
-          console.log("NextAuth Response: ", { ...userInfo, token });
+          const { token, user } = await response.json();
+          console.log("NextAuth Response: ", { user, token });
+          const userData = jwtDecode(token);
           return {
             // Use JWT Token as the user ID or any unique identifier
-            id: "",
-            ...userInfo,
-            token, // Include the token in the user object for later use
+            id: userData?.id,
+            name: user.name,
+            email: user.email,
+            userToken: token, // Include the token in the user object for later use
           };
         }
         return null;
@@ -44,4 +47,33 @@ export const AuthConfig: NextAuthOptions = {
       },
     }),
   ],
+
+  jwt: {
+    maxAge: 60 * 60 * 24,
+  },
+  pages: {
+    signIn: "/auth/login",
+  },
+
+  callbacks: {
+    jwt: function (params) {
+      console.log("Params From JWT :  ");
+      console.log(params);
+      if (params.user) {
+        params.token.userToken = params.user.userToken;
+        params.token.id = params.user.id;
+      }
+      return params?.token;
+    },
+
+    session: function (params) {
+      console.log("Sessions v2 : ");
+      console.log(params.session);
+
+      params.session.user.id = params.token.id;
+      params.session.user.userToken = params.token.userToken;
+
+      return params.session;
+    },
+  },
 };

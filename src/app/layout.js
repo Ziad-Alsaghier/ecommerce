@@ -4,7 +4,7 @@ import "tailwindcss";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "sonner";
-
+import Providers from "@/Providers/providers";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,11 +32,12 @@ export default function RootLayout({ children }) {
       className={inter.variable}
     >
       <body className="min-h-full flex flex-col" cz-shortcut-listen="true">
-        <Header />
-        {children}
-        <Toaster />
-        <Footer />
-
+        <Providers>
+          <Header />
+          {children}
+          <Toaster />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
